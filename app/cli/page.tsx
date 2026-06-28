@@ -6,61 +6,70 @@ import { usePathname } from "next/navigation";
 
 const VERIFY_OUTPUT = `$ npx a3stack verify eip155:8453:0x8004A169FB4a3325136EB29fA0ceB6D2e539a432#2376
 
-🔍 A3Stack — Identity Verifier
+🔍 Verifying agent identity
 
-   Agent ID: eip155:8453:0x8004A169FB4a3325136EB29fA0ceB6D2e539a432#2376
-
-   Chain:    8453 (eip155)
+   Chain:    Base (8453)
    Registry: 0x8004A169FB4a3325136EB29fA0ceB6D2e539a432
-   Token ID: 2376
+   Agent ID: #2376
 
-📡 Querying on-chain...
+   ✓ Verified on-chain
+   Owner: 0x1be93C700dDC596D701E8F2106B8F9166C625Adb
+   URI:   https://arcabot.ai/agent-metadata.json
+   Pay:   0x1be93C700dDC596D701E8F2106B8F9166C625Adb
+   Name:  Arca
+   ✓ Metadata back-reference present
 
-   ✅ Identity verified!
-   Owner:          0x1be93C...
-   Payment wallet: (defaults to owner)
+   Services:
+   → web: https://arcabot.ai
+   → A2A: https://arcabot.ai/.well-known/agent-card.json
+   → a3stack: https://a3stack.arcabot.ai
+   → clawfix: https://clawfix.dev`;
 
-   📋 Registration File:
-   Name:        Arca
-   Description: AI agent infrastructure. Built by arcabot.ai.
-   Active:      true
-   x402 Pay:    true
+const ENS_VERIFY_OUTPUT = `$ npx a3stack verify arcabot.eth
 
-   🔌 Services:
-   - MCP: https://mcp.arcabot.ai/mcp (v2025-06-18)
-   - web: https://arcabot.ai
+🔍 Verifying agent identity
 
-   🌐 Cross-chain registrations:
-   - eip155:1:0x8004...#88
-   - eip155:42161:0x8004...#16
-   [... 14 more chains]
+   ✓ Resolved arcabot.eth → 0x1be93C700dDC596D701E8F2106B8F9166C625Adb
 
-   🔗 Endpoints:
-   MCP: https://mcp.arcabot.ai/mcp
-   A2A: (not configured)`;
+   ✓ Found EVM registration(s):
 
-const LOOKUP_OUTPUT = `$ npx a3stack lookup 0x1be93C...
+   ✓ Ethereum        #22775  eip155:1:0x8004...#22775
+   ✓ Optimism        #0      eip155:10:0x8004...#0
+   ✓ Base            #2376   eip155:8453:0x8004...#2376
+   ✓ Scroll          #1      eip155:534352:0x8004...#1
+   … more chains when their public RPCs respond
 
-🔍 Looking up agents for 0x1be93C... on Base...
+   Name: Arca`;
 
-   Found 1 agent:
-   - #2376: Arca (active, x402 support)
-     Global ID: eip155:8453:0x8004A169FB4a3325136EB29fA0ceB6D2e539a432#2376`;
+
+const LOOKUP_OUTPUT = `$ A3STACK_CHAIN_IDS=1,10,8453,534352 npx a3stack lookup 0x1be93C700dDC596D701E8F2106B8F9166C625Adb
+
+🌐 Scanning all chains for 0x1be93C700dDC596D701E8F2106B8F9166C625Adb
+
+   Found 4 registration(s):
+
+   ✓ Ethereum        #22775  eip155:1:0x8004...#22775
+   ✓ Optimism        #0      eip155:10:0x8004...#0
+   ✓ Base            #2376   eip155:8453:0x8004...#2376
+   ✓ Scroll          #1      eip155:534352:0x8004...#1`;
+
 
 const PROBE_OUTPUT = `$ npx a3stack probe eip155:8453:0x8004A169FB4a3325136EB29fA0ceB6D2e539a432#2376
 
-🔭 Probing agent...
+🔬 Probing agent eip155:8453:0x8004...#2376
 
-   Verified:        ✅
-   Owner:           0x1be93C...
-   MCP endpoint:    https://mcp.arcabot.ai/mcp
-   Accepts payment: ✅
-   
-   Services:
-   - MCP: https://mcp.arcabot.ai/mcp
-   - web: https://arcabot.ai
-   
-   Cross-chain registrations: 23 chains (22 EVM + Solana)`;
+   ✓ Identity verified on Base
+   Owner: 0x1be93C700dDC596D701E8F2106B8F9166C625Adb
+   URI:   https://arcabot.ai/agent-metadata.json
+   Pay to: 0x1be93C700dDC596D701E8F2106B8F9166C625Adb
+   Name:   Arca
+   Active: yes
+
+   Endpoints:
+   → web      https://arcabot.ai
+   → A2A      https://arcabot.ai/.well-known/agent-card.json
+   → github   https://github.com/arcabotai`;
+
 
 const CHAINS_OUTPUT = `$ npx a3stack chains
 
@@ -93,28 +102,23 @@ const CHAINS_OUTPUT = `$ npx a3stack chains
 
    22 chains — same registry address on all.`;
 
-const COUNT_OUTPUT = `$ npx a3stack count
+const COUNT_OUTPUT = `$ npx a3stack count 8453
 
-   ERC-8004 Registry on Base
-   Total registered agents: 2,381`;
+📊 Agent count (chunked Transfer-event scan)
+
+   Base              2,376 agents`;
+
 
 const INIT_OUTPUT = `$ npx a3stack init
 
-🚀 A3Stack Project Setup
+🚀 Scaffold a new A3Stack agent
 
-? Project name: my-agent
-? Use TypeScript? Yes
-? Install dependencies? Yes
+Coming in v0.2.0 — for now, install the packages directly:
 
-✅ Created my-agent/
-   ├── agent.ts
-   ├── package.json
-   └── tsconfig.json
+   npm install @a3stack/core viem
 
-Next steps:
-  cd my-agent
-  npm install
-  PRIVATE_KEY=0x... npx tsx agent.ts`;
+Docs: https://a3stack.arcabot.ai`;
+
 
 export default function CliPage() {
   const pathname = usePathname();
@@ -147,11 +151,11 @@ export default function CliPage() {
         alignItems: "start",
       }}>
         {[
-          ["verify <globalId>", "Verify an agent's on-chain identity"],
-          ["lookup <address>", "Find all agents registered by a wallet"],
+          ["verify <globalId|ENS|wallet>", "Verify one global ID or all registrations owned by ENS/wallet"],
+          ["lookup <address|ENS>", "Find ERC-8004 registrations for an owner"],
           ["probe <globalId>", "Probe an agent's capabilities and endpoints"],
           ["chains", "List all 22 supported EVM chains"],
-          ["count", "Show total registered agents on Base"],
+          ["count [chainId]", "Count registered agents with chunked log scans"],
           ["init", "Scaffold a new A3Stack project"],
         ].map(([cmd, desc]) => (
           <>
@@ -168,10 +172,16 @@ export default function CliPage() {
       </p>
       <TerminalBlock code="npx a3stack verify eip155:8453:0x8004A169FB4a3325136EB29fA0ceB6D2e539a432#2376" />
       <CodeBlock code={VERIFY_OUTPUT} lang="text" />
+      <p>
+        You can also pass an ENS name or wallet address. The CLI resolves ENS, then scans supported
+        chains using chunked logs and RPC fallbacks.
+      </p>
+      <TerminalBlock code="npx a3stack verify arcabot.eth" />
+      <CodeBlock code={ENS_VERIFY_OUTPUT} lang="text" />
 
       <h2>lookup</h2>
-      <p>Find all ERC-8004 registrations for a wallet address on Base.</p>
-      <TerminalBlock code="npx a3stack lookup 0x1be93C..." />
+      <p>Find ERC-8004 registrations for a wallet or ENS name. Use <code>A3STACK_CHAIN_IDS</code> to keep public-RPC scans bounded.</p>
+      <TerminalBlock code="A3STACK_CHAIN_IDS=1,10,8453,534352 npx a3stack lookup arcabot.eth" />
       <CodeBlock code={LOOKUP_OUTPUT} lang="text" />
 
       <h2>probe</h2>
@@ -188,18 +198,18 @@ export default function CliPage() {
       <CodeBlock code={CHAINS_OUTPUT} lang="text" />
 
       <h2>count</h2>
-      <p>Show the current total of registered agents on Base.</p>
-      <TerminalBlock code="npx a3stack count" />
+      <p>Count registered agents by scanning mint logs. Public RPCs may rate-limit wide scans; the CLI chunks ranges and reports degraded chains honestly.</p>
+      <TerminalBlock code="npx a3stack count 8453" />
       <CodeBlock code={COUNT_OUTPUT} lang="text" />
 
       <h2>init</h2>
-      <p>Scaffold a new A3Stack project with TypeScript, example agent, and package.json.</p>
+      <p>The scaffold command is reserved for the next CLI release. For now, install the packages directly.</p>
       <TerminalBlock code="npx a3stack init" />
       <CodeBlock code={INIT_OUTPUT} lang="text" />
 
       <h2>Installing globally</h2>
       <p>You can also install the CLI globally for convenience:</p>
-      <TerminalBlock code={`npm install -g a3stack\na3stack verify eip155:8453:0x8004...#2376`} />
+      <TerminalBlock code={`npm install -g a3stack@0.1.1\na3stack verify arcabot.eth`} />
     </DocLayout>
   );
 }
