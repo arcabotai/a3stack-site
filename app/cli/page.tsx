@@ -25,7 +25,8 @@ const VERIFY_OUTPUT = `$ npx a3stack verify eip155:8453:0x8004A169FB4a3325136EB2
    → a3stack: https://a3stack.arcabot.ai
    → clawfix: https://clawfix.dev`;
 
-const ENS_VERIFY_OUTPUT = `$ npx a3stack verify arcabot.eth
+const ENS_VERIFY_OUTPUT = `$ # next CLI release / source build
+$ npx a3stack verify arcabot.eth
 
 🔍 Verifying agent identity
 
@@ -173,10 +174,10 @@ export default function CliPage() {
       <TerminalBlock code="npx a3stack verify eip155:8453:0x8004A169FB4a3325136EB29fA0ceB6D2e539a432#2376" />
       <CodeBlock code={VERIFY_OUTPUT} lang="text" />
       <p>
-        You can also pass an ENS name or wallet address. The CLI resolves ENS, then scans supported
+        The next CLI release also accepts ENS names or wallet addresses. It resolves ENS, then scans supported
         chains using chunked logs and RPC fallbacks.
       </p>
-      <TerminalBlock code="npx a3stack verify arcabot.eth" />
+      <TerminalBlock code="# after a3stack@0.1.1 is published\nnpx a3stack verify arcabot.eth" />
       <CodeBlock code={ENS_VERIFY_OUTPUT} lang="text" />
 
       <h2>lookup</h2>
@@ -209,7 +210,7 @@ export default function CliPage() {
 
       <h2>Installing globally</h2>
       <p>You can also install the CLI globally for convenience:</p>
-      <TerminalBlock code={`npm install -g a3stack@0.1.1\na3stack verify arcabot.eth`} />
+      <TerminalBlock code={`npm install -g a3stack\na3stack verify eip155:8453:0x8004...#2376`} />
     </DocLayout>
   );
 }
